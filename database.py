@@ -2,7 +2,6 @@
 CodeGalaxy - Database Operations
 MongoDB connection and all CRUD operations
 """
-
 from pymongo import MongoClient, ASCENDING, DESCENDING
 from pymongo.errors import ConnectionFailure, OperationFailure
 import bcrypt
@@ -27,6 +26,7 @@ def get_database():
             serverSelectionTimeoutMS=5000,
             connectTimeoutMS=5000
         )
+
 
         # Test connection
         client.admin.command('ping')
