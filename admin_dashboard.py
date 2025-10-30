@@ -4,7 +4,7 @@ Admin portal with analytics, user management, and moderation features
 """
 
 import streamlit as st
-import database
+import mock_database as database
 import ui_components
 import plotly.graph_objects as go
 from datetime import datetime, timedelta

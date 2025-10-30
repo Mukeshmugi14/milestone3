@@ -14,120 +14,16 @@ import email_service
 # LOGIN PAGE
 # ============================================================
 
+import mock_database
+
 def show_login_page():
     """
-    Displays the main login page with email/password and OAuth options
+    Bypasses the login page and automatically authenticates a mock user.
     """
-    # Center-aligned login card
-    col1, col2, col3 = st.columns([1, 2, 1])
-
-    with col2:
-        st.markdown("""
-        <div style='text-align: center; padding: 20px;'>
-            <h1 style='background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                       -webkit-background-clip: text;
-                       -webkit-text-fill-color: transparent;
-                       font-size: 48px;'>
-                CodeGalaxy 🚀
-            </h1>
-            <p style='color: #999; font-size: 18px;'>AI-Powered Code Generation Platform</p>
-        </div>
-        """, unsafe_allow_html=True)
-
-        # Check if we need to show signup or forgot password
-        if 'auth_mode' not in st.session_state:
-            st.session_state['auth_mode'] = 'login'
-
-        if st.session_state['auth_mode'] == 'signup':
-            show_signup_page()
-            return
-        elif st.session_state['auth_mode'] == 'forgot_password':
-            show_forgot_password()
-            return
-
-        # Login form
-        st.markdown("### Sign In")
-
-        email = st.text_input("Email", key="login_email", placeholder="your@email.com")
-        password = st.text_input("Password", type="password", key="login_password", placeholder="Enter your password")
-
-        col_login1, col_login2 = st.columns(2)
-
-        with col_login1:
-            if st.button("Sign In", use_container_width=True, type="primary"):
-                if not email or not password:
-                    st.error("Please enter both email and password")
-                elif not utils.validate_email(email):
-                    st.error("Please enter a valid email address")
-                else:
-                    # Verify credentials
-                    user = database.verify_email_password(email, password)
-
-                    if user:
-                        # Check if account is suspended
-                        if user.get('status') == 'suspended':
-                            st.error("Your account has been suspended. Please contact admin.")
-                            return
-
-                        # Login successful
-                        st.session_state['authenticated'] = True
-                        st.session_state['user'] = user
-                        st.session_state['is_admin'] = (user.get('role') == 'admin')
-
-                        # Update login history
-                        database.update_login_history(user['_id'], "0.0.0.0", "Streamlit App")
-
-                        # Log login action
-                        database.create_log(
-                            "user_action",
-                            "login",
-                            {"email": email, "method": "email"},
-                            user_id=user['_id']
-                        )
-
-                        st.success("Login successful!")
-                        st.rerun()
-                    else:
-                        st.error("Invalid email or password")
-
-                        # Log failed login
-                        database.create_log(
-                            "security_event",
-                            "failed_login",
-                            {"email": email, "method": "email"},
-                            severity="warning"
-                        )
-
-        with col_login2:
-            if st.button("Forgot Password?", use_container_width=True):
-                st.session_state['auth_mode'] = 'forgot_password'
-                st.rerun()
-
-        st.markdown("---")
-
-        # OAuth buttons
-        st.markdown("### Or continue with")
-
-        col_oauth1, col_oauth2 = st.columns(2)
-
-        with col_oauth1:
-            if st.button("🔵 Continue with Google", use_container_width=True):
-                st.info("Google OAuth would be initiated here. For demo purposes, this requires Google OAuth credentials configured in .env file.")
-                # handle_google_oauth() - Implement when credentials are set
-
-        with col_oauth2:
-            if st.button("⚫ Continue with GitHub", use_container_width=True):
-                st.info("GitHub OAuth would be initiated here. For demo purposes, this requires GitHub OAuth credentials configured in .env file.")
-                # handle_github_oauth() - Implement when credentials are set
-
-        st.markdown("---")
-
-        # Signup link
-        col_signup = st.columns([1, 2, 1])[1]
-        with col_signup:
-            if st.button("Don't have an account? Create one", use_container_width=True):
-                st.session_state['auth_mode'] = 'signup'
-                st.rerun()
+    st.session_state['authenticated'] = True
+    st.session_state['user'] = mock_database.MOCK_USERS["user_1"]
+    st.session_state['is_admin'] = False
+    st.rerun()
 
 # ============================================================
 # SIGNUP PAGE

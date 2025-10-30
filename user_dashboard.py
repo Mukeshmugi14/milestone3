@@ -4,7 +4,7 @@ All user-facing pages: Home, Generate Code, History, Profile, Reviews, Support
 """
 
 import streamlit as st
-import database
+import mock_database as database
 import ai_models
 import utils
 import ui_components
