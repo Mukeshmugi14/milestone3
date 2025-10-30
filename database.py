@@ -2,28 +2,30 @@
 CodeGalaxy - Database Operations
 MongoDB connection and all CRUD operations
 """
-from pymongo import MongoClient
-from dotenv import load_dotenv
+from pymongo import MongoClient, ASCENDING, DESCENDING
+from pymongo.errors import ConnectionFailure, OperationFailure
 import bcrypt
 import os
 from datetime import datetime, timedelta
 from bson import ObjectId
 import re
 
-
-
-load_dotenv()
-
-MONGO_URI = os.getenv("MONGO_URI")
-
-if not MONGO_URI:
-    st.error("Database connection error: MONGO_URI not found in environment variables")
-else:
-    client = MongoClient(MONGO_URI)
-    db = client["myDatabaseName"]
-    st.success("✅ Connected to MongoDB successfully!")
-
 # MongoDB Connection
+def get_database():
+    """
+    Establishes and returns MongoDB database connection
+    Returns: MongoDB database object
+    """
+    try:
+        mongo_uri = os.getenv('MONGO_URI')
+        if not mongo_uri:
+            raise ValueError("MONGO_URI not found in environment variables")
+
+        client = MongoClient(
+            mongo_uri,
+            serverSelectionTimeoutMS=5000,
+            connectTimeoutMS=5000
+        )
 
 
         # Test connection
