@@ -267,6 +267,19 @@ streamlit-extras==0.3.6    # UI enhancements
 
 ## 🚨 TROUBLESHOOTING
 
+### "Failed to generate OTP" During Signup
+
+**✅ FIXED!** The authentication system now handles this gracefully:
+
+- **What happens**: When MongoDB connection fails, you'll see a warning about "development mode"
+- **Result**: Your account will be created directly without OTP verification
+- **Action needed**:
+  1. Verify MongoDB Atlas cluster is running: https://cloud.mongodb.com
+  2. Add 0.0.0.0/0 to IP whitelist in Network Access
+  3. Check `.env` file has correct MONGO_URI
+
+**See TROUBLESHOOTING.md for detailed MongoDB setup instructions**
+
 ### "ModuleNotFoundError"
 ```bash
 pip install -r requirements.txt
@@ -282,6 +295,7 @@ streamlit run main.py --server.port 8502
 - Check internet connection
 - Verify cluster is active on MongoDB Atlas
 - Confirm IP whitelist includes 0.0.0.0/0
+- See TROUBLESHOOTING.md for detailed steps
 
 ### "Hugging Face API error"
 - First generation may fail (cold start)
@@ -290,8 +304,8 @@ streamlit run main.py --server.port 8502
 
 ### "OTP not received"
 - Email features are optional
-- You can skip OTP for testing
-- Configure Gmail SMTP in .env to enable
+- Development mode allows signup without OTP
+- Configure Gmail SMTP in .env to enable emails
 
 ---
 
