@@ -353,6 +353,8 @@ streamlit run main.py --server.port 8502
 - `README.md` - Full documentation
 - `QUICKSTART.md` - Setup guide
 - `YOUR_LINKS.md` - URLs & tour
+- `TROUBLESHOOTING.md` - Detailed troubleshooting
+- `test_connection.py` - Test MongoDB connection
 - This file - Complete summary
 
 **Common Issues:**
