@@ -18,11 +18,20 @@ import mock_database
 
 def show_login_page():
     """
-    Bypasses the login page and automatically authenticates a mock user.
+    Bypasses the login page and automatically authenticates a mock user
+    based on the 'view' query parameter. Defaults to 'user'.
     """
+    query_params = st.query_params
+    view = query_params.get('view', 'user')
+
+    if view == "admin":
+        st.session_state['user'] = mock_database.MOCK_USERS["admin_1"]
+        st.session_state['is_admin'] = True
+    else:
+        st.session_state['user'] = mock_database.MOCK_USERS["user_1"]
+        st.session_state['is_admin'] = False
+
     st.session_state['authenticated'] = True
-    st.session_state['user'] = mock_database.MOCK_USERS["user_1"]
-    st.session_state['is_admin'] = False
     st.rerun()
 
 # ============================================================
