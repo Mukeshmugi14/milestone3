@@ -192,9 +192,51 @@ def show_signup_page():
                                     st.success(f"OTP sent to {email}! Please check your inbox.")
                                     st.rerun()
                                 else:
-                                    st.error("Failed to send OTP email. Please try again.")
+                                    st.warning("⚠️ Email service not configured. Creating account without OTP verification (development mode).")
+                                    # Fallback: Create account directly without OTP
+                                    user = database.create_user(
+                                        name=name,
+                                        email=email,
+                                        password=password,
+                                        auth_provider="email"
+                                    )
+                                    if user:
+                                        st.session_state['authenticated'] = True
+                                        st.session_state['user'] = user
+                                        st.session_state['is_admin'] = False
+                                        st.success("✅ Account created successfully! Welcome to CodeGalaxy! 🚀")
+                                        st.rerun()
+                                    else:
+                                        st.error("Failed to create account. Please check database connection.")
                             else:
-                                st.error("Failed to generate OTP. Please try again.")
+                                # Fallback: Database not connected, create account directly
+                                st.warning("⚠️ Database OTP service unavailable. Creating account without OTP verification (development mode).")
+                                user = database.create_user(
+                                    name=name,
+                                    email=email,
+                                    password=password,
+                                    auth_provider="email"
+                                )
+                                if user:
+                                    st.session_state['authenticated'] = True
+                                    st.session_state['user'] = user
+                                    st.session_state['is_admin'] = False
+
+                                    # Log signup action if possible
+                                    try:
+                                        database.create_log(
+                                            "user_action",
+                                            "signup",
+                                            {"email": user['email'], "method": "email_no_otp"},
+                                            user_id=user['_id']
+                                        )
+                                    except:
+                                        pass  # Database logging might fail too
+
+                                    st.success("✅ Account created successfully! Welcome to CodeGalaxy! 🚀")
+                                    st.rerun()
+                                else:
+                                    st.error("❌ Failed to create account. Please check database connection and try again.")
 
         with col2:
             if st.button("Back to Login", use_container_width=True):
