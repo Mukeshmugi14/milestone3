@@ -41,6 +41,7 @@
 ✅ README.md               - Complete documentation (300 lines)
 ✅ QUICKSTART.md           - Setup guide
 ✅ YOUR_LINKS.md           - Access URLs & tour
+✅ TROUBLESHOOTING.md      - Detailed troubleshooting guide
 ✅ DEPLOYMENT_SUMMARY.md   - This file
 ```
 
