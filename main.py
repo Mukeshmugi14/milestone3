@@ -140,6 +140,10 @@ def check_session_timeout():
 
 def main():
     """Main application routing logic"""
+    # Initialize Firebase
+    from firebase_config import initialize_firebase
+    auth = initialize_firebase()
+
     # Initialize session state
     initialize_session_state()
 
